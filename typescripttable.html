@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<div class="container my-3">
+        <input type="text" placeholder="search" class="form-control w-25 float-right my-2" id="abc">
+        <table class="table  table-bordered">
+                <thead>
+                    <tr class="bg-warning">
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>City</th>
+                        <th>Phone number</th>
+                        <th>Viewmore
+                            
+                        </th>
+                        
+                     </tr>
+                </thead>
+                <tbody id="row">
+            
+                </tbody>
+            </table>
+        
+    
+</div>
+    
+
+<script src="jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
+<script>
+
+    var response;
+        $(function(){
+            
+            $.ajax({
+                "url":"https://jsonplaceholder.typicode.com/users",
+                "method":"GET",
+                "success":function(res){
+                    prepareList(res);
+                },
+                "error":function(err){
+                    console.log(err);
+                }
+            })
+        })
+        function prepareList(res){
+            $("#row").html("");
+            
+            res.forEach(function(object,index){
+                var tableelem=
+                "<tr class='bg-info text-white text-center'>"+
+            "<td>"+object.id+"</td>"+
+            "<td>"+object.name+"</td>"+
+            "<td>"+object.username+"</td>"+
+            "<td>"+object.address.city+"</td>"+
+            "<td>"+object.phone+"</td>"+
+            "<td>"+'<button class="btn btn-success btn-link text-white">viewmore</button>'+"</td>"+
+            "</tr>";
+           $("#row").append(tableelem);
+           
+                 response = res;
+                
+          });
+          
+        }
+
+        $("#abc").keyup(function(event){
+            var input = event.target;
+            var input1=$(input).val();
+
+            if(input1.length >= 3) {
+                var filteredResponse = response.filter(function(item){
+             return item.name.indexOf(input1) != -1;
+                });
+                prepareList(filteredResponse);
+            } else {
+                prepareList(response);
+            }
+    //   filteredResponse = JSON.parse(filteredResponse);
+        });
+    </script>
